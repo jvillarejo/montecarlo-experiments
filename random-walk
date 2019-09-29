@@ -1,0 +1,38 @@
+#!/bin/env ruby
+require 'monaco'
+
+def random_walk(steps)
+  x, y = 0, 0
+  steps.times do 
+    walk = [
+      [0,1],
+      [1,0],
+      [-1,0],
+      [0,-1]
+    ]
+    dx,dy = walk[rand(0..3)]
+    x = x + dx
+    y = y + dy
+  end
+
+  [x,y]
+end
+
+def distance(x,y)
+  x.abs + y.abs
+end
+
+n_blocks = 3
+results = (1...31).map do |steps|
+
+  simulation = Monaco::Simulation.new(trials: 100_000) do
+    x,y = random_walk(steps)
+    distance = distance(x,y)
+    distance <= n_blocks
+  end
+
+  probability = simulation.run.to_f
+  [steps, probability * 100]
+
+  puts 'Steps: %s, no transport for %s blocks: %.2f' % [steps, n_blocks, probability*100]
+end

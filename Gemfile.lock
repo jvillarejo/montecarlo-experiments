@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    monaco (0.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  monaco
+
+BUNDLED WITH
+   2.0.2

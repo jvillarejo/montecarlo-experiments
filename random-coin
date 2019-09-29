@@ -1,0 +1,38 @@
+#!/bin/env ruby
+require 'monaco'
+
+def random_coin(n_throws)
+  head, tail = 0, 1
+  n_throws.times.map do 
+    rand(head..tail)
+  end
+end
+
+def sequence_in_a_row(throws)
+  throws.chunk_while { |bef,aft| bef == aft }.first
+end
+
+def highest_consecutive_sequence(throws)
+  throws.chunk_while { |bef,aft| bef == aft }
+        .max_by { |x| x.size }
+end
+
+size_of_sequence = 2
+results = (size_of_sequence..10).map do |n_throws|
+  simulation = Monaco::Simulation.new(trials: 50_000) do
+    head = 0
+    tail = 1
+
+    throws = random_coin(n_throws)
+    # sequence = sequence_in_a_row(throws)
+    sequence = highest_consecutive_sequence(throws)
+    
+    size = sequence.first == head ? sequence.size : 0
+    # size = sequence.size
+
+    size >= size_of_sequence
+  end
+
+  probability = simulation.run.to_f
+  puts 'Throws: %02d, Sequence > %s, probability: %.2f%%' % [n_throws, size_of_sequence, probability*100]
+end
